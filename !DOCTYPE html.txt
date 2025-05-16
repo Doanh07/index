@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Room Renovation Visualiser</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 600px; margin: auto; }
+    input, button { padding: 10px; font-size: 16px; margin-top: 10px; }
+    img { margin-top: 20px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>Room Renovation Preview</h2>
+  <input id="prompt" placeholder="e.g., modern kitchen with island counter" />
+  <button onclick="generate()">Generate</button>
+  <p id="status"></p>
+  <img id="output" style="display:none;" />
+
+  <script>
+    async function generate() {
+      const prompt = document.getElementById('prompt').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+      status.textContent = "Generating...";
+      output.style.display = "none";
+
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+      if (data.imageUrl) {
+        output.src = data.imageUrl;
+        output.style.display = "block";
+        status.textContent = "Here’s your visualised room!";
+      } else {
+        status.textContent = "Something went wrong.";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Room Renovation Visualiser</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 600px; margin: auto; }
+    input, button { padding: 10px; font-size: 16px; margin-top: 10px; }
+    img { margin-top: 20px; width: 100%; }
+  </style>
+</head>
+<body>
+
+<h2>Room Renovation Preview Generator</h2>
+<input type="text" id="prompt" placeholder="e.g., modern white kitchen with marble counters" />
+<br>
+<button onclick="generate()">Generate Image</button>
+<p id="status"></p>
+<img id="outputImage" style="display:none;" />
+
+<script>
+  async function generate() {
+    const prompt = document.getElementById("prompt").value;
+    const outputImage = document.getElementById("outputImage");
+    const status = document.getElementById("status");
+    outputImage.style.display = 'none';
+    status.textContent = 'Generating image...';
+
+    const response = await fetch("https://api.openai.com/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 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"
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        n: 1,
+        size: "512x512"
+      })
+    });
+
+    const data = await response.json();
+    if (data && data.data && data.data[0].url) {
+      outputImage.src = data.data[0].url;
+      outputImage.style.display = 'block';
+      status.textContent = "Done!";
+    } else {
+      status.textContent = "Failed to generate image.";
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+renovation-visualiser/
+├── server.js
+├── .env
+└── public/
+    └── index.html
