@@ -1,1 +1,1 @@
-OPENAI_API_KEY=sk-xxxxxxx   # replace with your real key
+OPENAI_API_KEY=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
